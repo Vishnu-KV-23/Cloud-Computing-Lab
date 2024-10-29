@@ -1,0 +1,22 @@
+from pyspark import SparkContext, SparkConf
+
+# Initialize SparkContext
+conf = SparkConf().setAppName("WordCount").setMaster("local")
+sc = SparkContext(conf=conf)
+
+# Load the input data
+input_file = "path/to/your/textfile.txt"  # Replace with your file path
+text_file = sc.textFile(input_file)
+
+# Perform Word Count
+word_counts = (text_file
+               .flatMap(lambda line: line.split())      # Split each line into words
+               .map(lambda word: (word, 1))             # Map each word to a (word, 1) pair
+               .reduceByKey(lambda a, b: a + b))        # Reduce by key to get the word counts
+
+# Collect and Print the results
+for word, count in word_counts.collect():
+    print(f"{word}: {count}")
+
+# Stop the SparkContext
+sc.stop()

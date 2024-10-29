@@ -1,0 +1,91 @@
+from pyspark import SparkContext, SparkConf
+
+# Initialize SparkContext
+conf = SparkConf().setAppName("PrimeCheck").setMaster("local")
+sc = SparkContext(conf=conf)
+
+# Load the input data
+input_file = "path/to/your/numbers.txt"  # Replace with your file path
+numbers_rdd = sc.textFile(input_file).flatMap(lambda line: line.split()).map(lambda x: int(x))
+
+# Function to check if a number is prime
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+# Map each number to whether it is prime or not
+prime_check = numbers_rdd.map(lambda x: (x, is_prime(x)))
+
+# Collect and print the results
+for number, is_prime_flag in prime_check.collect():
+    print(f"Number: {number}, Is Prime: {is_prime_flag}")
+
+# Stop the SparkContext
+sc.stop()
+
+
+
+
+
+
+
+
+
+from pyspark import SparkContext, SparkConf
+
+# Initialize SparkContext
+conf = SparkConf().setAppName("OddEvenCheck").setMaster("local")
+sc = SparkContext(conf=conf)
+
+# Load the input data
+input_file = "path/to/your/numbers.txt"  # Replace with your file path
+numbers_rdd = sc.textFile(input_file).flatMap(lambda line: line.split()).map(lambda x: int(x))
+
+# Map each number to whether it is even or odd
+odd_even_check = numbers_rdd.map(lambda x: (x, "Even" if x % 2 == 0 else "Odd"))
+
+# Collect and print the results
+for number, odd_or_even in odd_even_check.collect():
+    print(f"Number: {number}, Type: {odd_or_even}")
+
+# Stop the SparkContext
+sc.stop()
+
+
+
+
+
+
+
+
+from pyspark import SparkContext, SparkConf
+
+# Initialize SparkContext
+conf = SparkConf().setAppName("FibonacciCheck").setMaster("local")
+sc = SparkContext(conf=conf)
+
+# Load the input data
+input_file = "path/to/your/numbers.txt"  # Replace with your file path
+numbers_rdd = sc.textFile(input_file).flatMap(lambda line: line.split()).map(lambda x: int(x))
+
+# Function to check if a number is in the Fibonacci sequence
+def is_fibonacci(n):
+    # A number is Fibonacci if one of (5*n^2 + 4) or (5*n^2 - 4) is a perfect square
+    def is_perfect_square(x):
+        s = int(x**0.5)
+        return s * s == x
+    return is_perfect_square(5 * n * n + 4) or is_perfect_square(5 * n * n - 4)
+
+# Map each number to whether it is a Fibonacci number or not
+fibonacci_check = numbers_rdd.map(lambda x: (x, is_fibonacci(x)))
+
+# Collect and print the results
+for number, is_fibonacci_flag in fibonacci_check.collect():
+    print(f"Number: {number}, Is Fibonacci: {is_fibonacci_flag}")
+
+# Stop the SparkContext
+sc.stop()

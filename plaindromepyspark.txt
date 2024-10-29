@@ -1,0 +1,26 @@
+from pyspark import SparkContext, SparkConf
+
+# Initialize SparkContext
+conf = SparkConf().setAppName("PalindromeCheck").setMaster("local")
+sc = SparkContext(conf=conf)
+
+# Load the input data
+input_file = "path/to/your/textfile.txt"  # Replace with your file path
+text_file = sc.textFile(input_file)
+
+# Function to check if a word is a palindrome
+def is_palindrome(word):
+    return word == word[::-1]
+
+# Find palindromic words
+palindromic_words = (text_file
+                     .flatMap(lambda line: line.split())      # Split each line into words
+                     .filter(is_palindrome)                   # Filter to keep only palindromic words
+                     .distinct())                             # Remove duplicates
+
+# Collect and print the results
+for word in palindromic_words.collect():
+    print(word)
+
+# Stop the SparkContext
+sc.stop()
