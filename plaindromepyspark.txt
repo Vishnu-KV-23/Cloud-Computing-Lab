@@ -1,12 +1,25 @@
-from pyspark import SparkContext, SparkConf
+from pyspark import SparkContext
 
 # Initialize SparkContext
-conf = SparkConf().setAppName("PalindromeCheck").setMaster("local")
-sc = SparkContext(conf=conf)
+
+sc = SparkContext("local","palindrome")
 
 # Load the input data
-input_file = "path/to/your/textfile.txt"  # Replace with your file path
-text_file = sc.textFile(input_file)
+
+text_file = sc.textFile("path/to/your/textfile.txt")
+
+
+
+
+#same for all programs in pyspark until now
+
+
+#flaptmap- to flatten text
+#to sep using space and all
+
+
+#map-
+
 
 # Function to check if a word is a palindrome
 def is_palindrome(word):
